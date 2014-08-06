@@ -26,7 +26,30 @@ function saveMenuViewResult(records,dateId,callback){
 
 }
 
+function doMenuOrderStat(callback){
+    var params = dateUtil.getDayRangeLong();
+    menuItemDao.getMenuOrderByDay(params,function(err,record){
+        callback(err,record);
+
+    });
+}
+
+function saveMenuOrderResult(records,dateId,callback){
+    for(var i= 0,j=records.length; i<j; i++){
+
+        menuItemDao.saveMenuOrderResult(records[i],dateId,function(err,result){
+            if(err){
+                callback(err,null);
+            }
+        });
+    }
+    callback(null,true);
+
+}
+
 module.exports = {
     doMenuClickStat : doMenuClickStat,
-    saveMenuViewResult : saveMenuViewResult
+    saveMenuViewResult : saveMenuViewResult,
+    doMenuOrderStat : doMenuOrderStat,
+    saveMenuOrderResult : saveMenuOrderResult
 }

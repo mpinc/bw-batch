@@ -25,7 +25,7 @@ var getMenuViewByDay = function(params,callback){
             },
             {
                 "method" : "GET",
-                //"time":{$lte: params.end,$gt:params.start},
+                "time":{$lte: params.end,$gt:params.start},
                 "bizId" : null,
                 "path" : "/biz/:bizId/prod/:id"
             },
@@ -84,8 +84,73 @@ var saveMenuViewResult = function(params,dateId, callback){
         });
     });
 }
+/**
+ * Customer order menu statistics by day
+ */
+function getMenuOrderByDay(params,callback){
+    mdb.getDb(function (error, db) {
+        if (error) {
+            callback(error , null);
+        }
+        db.collection('api_records').group(
+            {
+                "params.productId" : true,
+                "params.bizId" : false
+
+            },
+            {
+                "method" : "POST",
+                "time":{$lte: params.end,$gt:params.start},
+                "bizId" : null,
+                "path" : "/biz/:bizId/prod/:productId/order"
+            },
+            {count:0},
+            function (doc, out) {
+                out.count +=1
+
+            },
+            function (out) {
+                return out;
+            },
+            function(err, results) {
+                mdb.closeDB();
+                /*results.sort(function(a,b){
+                 return b.count - a.count;
+                 });*/
+                callback(err,results);
+
+
+            });
+
+    });
+}
+
+function saveMenuOrderResult(params,dateId, callback){
+    var query='insert into stat_menu_order (biz_id,product_id,count,date_id) values(?,?,?,?);'
+    var paramArray=[],i=0;
+    paramArray[i++]=params.bizId;
+    paramArray[i++]=params.productId;
+    paramArray[i++]=params.count;
+    paramArray[i]=dateId;
+    db.getCon(function (err,con){
+        //console.log(query);
+        con.query(query, paramArray,function (error, result) {
+            if (error){
+                con.rollback();
+            }
+            con.release();
+            if (error){
+                return callback(error,null);
+            }else{
+                return callback(null,Number(result.insertId));
+            }
+        });
+    });
+}
 
 module.exports = {
     getMenuViewByDay : getMenuViewByDay,
-    saveMenuViewResult : saveMenuViewResult
+    saveMenuViewResult : saveMenuViewResult,
+    getMenuOrderByDay : getMenuOrderByDay,
+    saveMenuOrderResult : saveMenuOrderResult
 }
