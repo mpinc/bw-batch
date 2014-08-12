@@ -8,9 +8,10 @@ var dataUtil = require('./util/DateUtil.js');
 var bizMenuStat = require('./bl/BizMenuStat.js');
 var customerCheckInStat = require('./bl/CustomerCheckInStat.js');
 var statDate = require('./bl/StatDate.js');
+var nodeRequest = require('request');
 
 later.date.localTime();
-var basic = {h:[1],m: [10]};
+var basic = {h:[1],m: [10],s:[10]};
 var composite = [basic];
 
 /*
@@ -29,20 +30,42 @@ var sched =  {
 
  try{
     later.setInterval(function() {
+
         var dateKey ;
-        Seq().seq(function() {
+        Seq().seq(function(){
             var that = this;
-            statDate.saveStatDate(function(err,result){
-                if(err){
-                    throw err;
+            console.log("init create business index")
+            nodeRequest.get('http://127.0.0.1:8080/cust/do/createBizIndex', null,function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    console.log("create business index") ;
                 }else{
-                    dateKey = result;
+                    console.log(body);
                 }
                 that();
-            })
-
+            });
 
         }).seq(function(){
+                var that = this;
+
+                nodeRequest.get('http://127.0.0.1:8080/cust/do/createProdIndex', null,function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        console.log("create product index") ;
+                    }else{
+                        console.log(body);
+                    }
+                    that();
+                });
+            }).seq(function() {
+                var that = this;
+                statDate.saveStatDate(function(err,result){
+                    if(err){
+                        throw err;
+                    }else{
+                        dateKey = result;
+                    }
+                    that();
+                })
+            }).seq(function(){
             var that = this;
             bizMenuStat.doMenuClickStat(function(err,records){
                 if(err){
