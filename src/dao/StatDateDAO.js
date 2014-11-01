@@ -15,7 +15,8 @@ var insertNewDate = function(params,callback){
     paramArray[i++]=params.yearMonth;
     paramArray[i]=params.yearWeek;
     db.getCon(function (err,con){
-        //console.log(query);
+        var dateTemp = new Date();
+        console.log(dateTemp.toLocaleDateString(),"-",dateTemp.toLocaleTimeString() ,"--insert date id");
         con.query(query, paramArray,function (error, result) {
             if (error){
                 con.rollback();
