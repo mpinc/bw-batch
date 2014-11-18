@@ -41,6 +41,13 @@ var mongodbConnectionOptions = {
     dbName : 'bizwise'
 };
 
+var loggerConfig = {
+    appenders: [
+        { type: 'console' }
+    ],
+    replaceConsole: true
+}
+
 function getMysqlOptions (){
     return mysqlConnectOptions;
 }
@@ -51,5 +58,6 @@ function getMongodbOption(){
 module.exports = {
 
     getMysqlOptions : getMysqlOptions ,
-    getMongodbOption : getMongodbOption
+    getMongodbOption : getMongodbOption ,
+    loggerConfig : loggerConfig
 }

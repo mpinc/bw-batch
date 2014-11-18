@@ -5,6 +5,9 @@
 var db = require('../config/MysqlConnection.js');
 var Seq = require('seq');
 
+var serverLogger = require('../util/ServerLogger.js');
+var logger = serverLogger.createLogger('StatDateDAO.js');
+
 var insertNewDate = function(params,callback){
 
     var querySelect = "select * from date_dimension dd where " +
@@ -20,34 +23,26 @@ var insertNewDate = function(params,callback){
     paramArray[i]=params.yearWeek;
     Seq().seq(function(){
         var that = this;
-        db.getCon(function (err,con){
-            con.query(querySelect, paramArray,function (error, rows) {
-                if (error){
-                    con.rollback();
-                }
-                con.release();
-                if(rows != null && rows.length>0){
-                    return callback(null,{success:false});
+        db.dbQuery(querySelect,paramArray,function(error,rows){
+            logger.debug(' insertNewDate ')
+            if(rows != null && rows.length>0){
+                logger.warn(' insertNewDate ' + 'failed')
+                return callback(null,{success:false});
 
-                }else{
-                    that();
-                }
-            });
+            }else{
+                that();
+            }
+
         });
+
     }).seq(function(){
-            db.getCon(function (err,con){
-                con.query(query, paramArray,function (error, result) {
-                    if (error){
-                        con.rollback();
-                    }
-                    con.release();
-                    if (error){
-                        return callback(error,null);
-                    }else{
-                        return callback(null,Number(result.insertId));
-                    }
-                });
+            db.dbQuery(query,paramArray,function(error,rows){
+                logger.debug(' insertNewDate ')
+                callback(error,rows);
+
             });
+
+
         })
 
 

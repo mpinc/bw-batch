@@ -10,6 +10,9 @@ var customerCheckInStat = require('./bl/CustomerCheckInStat.js');
 var statDate = require('./bl/StatDate.js');
 var nodeRequest = require('request');
 
+var serverLogger = require('./util/ServerLogger.js');
+var logger = serverLogger.createLogger('TimerStat.js');
+
 later.date.localTime();
 var basic = {h:[1],m: [10],s:[10]};
 var composite = [basic];
@@ -30,16 +33,18 @@ var sched =  {
 
  try{
     later.setInterval(function() {
-
+        logger.info("Begin to execute batch job !")
         var dateKey ;
         Seq().seq(function(){
             var that = this;
-            console.log("init create business index")
+            logger.debug("init create business index")
             nodeRequest.get('http://127.0.0.1:8080/cust/do/createBizIndex', null,function (error, response, body) {
                 if (!error && response.statusCode == 200) {
-                    console.log("create business index") ;
+                    //console.log("create business index") ;
+                    logger.info("create business index success")
                 }else{
-                    console.log(body);
+                    //console.log(body);
+                    logger.error("create business index false")
                 }
                 that();
             });
@@ -49,9 +54,11 @@ var sched =  {
 
                 nodeRequest.get('http://127.0.0.1:8080/cust/do/createProdIndex', null,function (error, response, body) {
                     if (!error && response.statusCode == 200) {
-                        console.log("create product index") ;
+                        //console.log("create product index") ;
+                        logger.info("create product index success")
                     }else{
-                        console.log(body);
+                        //console.log(body);
+                        logger.info("create product index false")
                     }
                     that();
                 });
@@ -59,9 +66,10 @@ var sched =  {
                 var that = this;
                 statDate.saveStatDate(function(err,result){
                     if(err){
+                        logger.error(err.message)
                         throw err;
                     }else{
-                        dateKey = result;
+                        dateKey = result.insertId;
                     }
                     that();
                 })
@@ -69,6 +77,7 @@ var sched =  {
             var that = this;
             bizMenuStat.doMenuClickStat(function(err,records){
                 if(err){
+                    logger.error(err.message)
                     throw err;
                 }else{
                     var statTime = dataUtil.getLastDayLong();
@@ -87,10 +96,11 @@ var sched =  {
                     if(menuItemArray != null && menuItemArray.length >0){
                         bizMenuStat.saveMenuViewResult(menuItemArray,dateKey,function(err,result){
                             if(err){
+                                logger.error(err.message)
                                 throw err;
                             }
                         });
-                        console.log(menuItemArray);
+                        //console.log(menuItemArray);
                     }
                 }
                 that();
@@ -99,6 +109,7 @@ var sched =  {
                 var that = this;
                 bizMenuStat.doMenuOrderStat(function(err,records){
                     if(err){
+                        logger.error(err.message)
                         throw err;
                     }else{
                         var statTime = dataUtil.getLastDayLong();
@@ -117,10 +128,11 @@ var sched =  {
                         if(menuItemArray != null && menuItemArray.length >0){
                             bizMenuStat.saveMenuOrderResult(menuItemArray,dateKey,function(err,result){
                                 if(err){
+                                    logger.error(err.message)
                                     throw err;
                                 }
                             });
-                            console.log(menuItemArray);
+                            //console.log(menuItemArray);
                         }
                     }
                     that();
@@ -129,7 +141,7 @@ var sched =  {
             customerCheckInStat.doCustomerCheckInStat(function(err,records){
                 if(err){
                     throw err;
-                    console.log(err.message);
+                    logger.error(err.message)
                 }else{
                     var statTime = dataUtil.getLastDayLong();
                     var checkInCountArray = [];
@@ -146,6 +158,7 @@ var sched =  {
                     if(checkInCountArray != null && checkInCountArray.length >0){
                         customerCheckInStat.saveCustomerCheckInRes(checkInCountArray,dateKey,function(err,result){
                             if(err){
+                                logger.error(err.message)
                                 throw err;
                             }
                         });
@@ -159,6 +172,7 @@ var sched =  {
 
     }, sched);
 }catch(err){
+    logger.error(err.message)
     console.log("Catch Exception: "+err);
 }
 

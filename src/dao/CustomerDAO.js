@@ -3,7 +3,8 @@
  */
 var db = require('../config/MysqlConnection.js');
 var mdb = require('../config/MongodbConnection.js');
-
+var serverLogger = require('../util/ServerLogger.js');
+var logger = serverLogger.createLogger('CustomerDAO.js');
 
 /**
  * Get yesterday data that customer check in business count
@@ -34,6 +35,7 @@ var getCheckInCountByDay = function(params,callback){
             },
             function(err, results) {
                 mdb.closeDB();
+                logger.debug(' getCheckInCountByDay ');
                 callback(err,results);
 
             });
@@ -59,7 +61,12 @@ var saveCheckInCountByDay = function (params,dateId,callback){
     paramArray[i++]=params.bizId;
     paramArray[i++]=params.count;
     paramArray[i]=dateId;
-    db.getCon(function (err,con){
+
+    db.dbQuery(query,paramArray,function(error,result){
+        logger.debug(' saveCheckInCountByDay ')
+        return callback(error,result);
+    });
+    /*db.getCon(function (err,con){
         //console.log(query);
         con.query(query, paramArray,function (error, result) {
             if (error){
@@ -72,7 +79,7 @@ var saveCheckInCountByDay = function (params,dateId,callback){
                 return callback(null,Number(result.insertId));
             }
         });
-    });
+    });*/
 
 }
 module.exports = {

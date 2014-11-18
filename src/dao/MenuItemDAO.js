@@ -5,7 +5,8 @@
 var db = require('../config/MysqlConnection.js');
 var mdb = require('../config/MongodbConnection.js');
 
-
+var serverLogger = require('../util/ServerLogger.js');
+var logger = serverLogger.createLogger('MenuItemDAO.js');
 /**
  * Get yesterday data that customer view menu item detail
  * From mongodb
@@ -42,6 +43,7 @@ var getMenuViewByDay = function(params,callback){
                 /*results.sort(function(a,b){
                     return b.count - a.count;
                 });*/
+                logger.debug(' getMenuViewByDay ');
                 callback(err,results);
 
 
@@ -69,7 +71,12 @@ var saveMenuViewResult = function(params,dateId, callback){
     paramArray[i++]=params.productId;
     paramArray[i++]=params.count;
     paramArray[i]=dateId;
-    db.getCon(function (err,con){
+
+    db.dbQuery(query,paramArray,function(error,result){
+        logger.debug(' saveMenuViewResult ')
+        return callback(error,result);
+    });
+    /*db.getCon(function (err,con){
         //console.log(query);
         con.query(query, paramArray,function (error, result) {
             if (error){
@@ -82,7 +89,7 @@ var saveMenuViewResult = function(params,dateId, callback){
                 return callback(null,Number(result.insertId));
             }
         });
-    });
+    });*/
 }
 /**
  * Customer order menu statistics by day
@@ -117,6 +124,7 @@ function getMenuOrderByDay(params,callback){
                 /*results.sort(function(a,b){
                  return b.count - a.count;
                  });*/
+                logger.debug(' getMenuOrderByDay ');
                 callback(err,results);
 
 
@@ -132,7 +140,13 @@ function saveMenuOrderResult(params,dateId, callback){
     paramArray[i++]=params.productId;
     paramArray[i++]=params.count;
     paramArray[i]=dateId;
-    db.getCon(function (err,con){
+
+    db.dbQuery(query,paramArray,function(error,result){
+        logger.debug(' saveMenuOrderResult ')
+        return callback(error,result);
+    });
+
+    /*db.getCon(function (err,con){
         //console.log(query);
         con.query(query, paramArray,function (error, result) {
             if (error){
@@ -145,7 +159,7 @@ function saveMenuOrderResult(params,dateId, callback){
                 return callback(null,Number(result.insertId));
             }
         });
-    });
+    });*/
 }
 
 module.exports = {
