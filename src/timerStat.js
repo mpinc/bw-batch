@@ -7,6 +7,7 @@ var Seq = require('seq');
 var dataUtil = require('./util/DateUtil.js');
 var bizMenuStat = require('./bl/BizMenuStat.js');
 var customerCheckInStat = require('./bl/CustomerCheckInStat.js');
+var orderBL = require('./bl/OrderBL.js');
 var statDate = require('./bl/StatDate.js');
 var nodeRequest = require('request');
 
@@ -14,18 +15,17 @@ var serverLogger = require('./util/ServerLogger.js');
 var logger = serverLogger.createLogger('TimerStat.js');
 
 later.date.localTime();
+
 var basic = {h:[1],m: [10],s:[10]};
 var composite = [basic];
 
-/*
-var basic0 = {s:[55]};
+/*var basic0 = {s:[55]};
 var basic1 = {s:[15]};
 var basic2 = {s:[35]};
 var basic3 = {s:[25]};
 var basic4 = {s:[45]};
 var basic5 = {s:[5]};
-var composite = [basic0,basic1,basic2,basic3,basic5];
-*/
+var composite = [basic0,basic1,basic2,basic3,basic5];*/
 
 var sched =  {
     schedules:composite
@@ -62,6 +62,18 @@ var sched =  {
                     }
                     that();
                 });
+            }).seq(function(){
+                var that = this;
+                orderBL.setOrderExpired(function(err,result){
+                    if(err){
+                        logger.error(err.message)
+
+                    }else{
+                        logger.info(' SetOrderExpired ' + result.affectedRows +" orders is update to expired");
+                    }
+                    that();
+                })
+
             }).seq(function() {
                 var that = this;
                 statDate.saveStatDate(function(err,result){

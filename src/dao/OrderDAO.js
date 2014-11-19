@@ -9,7 +9,7 @@ var logger = serverLogger.createLogger('OrderDAO.js');
 
 
 function doOrderExpired(params,callback){
-    var query='update order_info set status = 109 where (status<>101 or status<>109) and order_start < ?' ;
+    var query='update order_info set status = 109 where (status<>101 or status<>104 or status<>109) and order_start < ?' ;
     var paramArray=[],i=0;
     paramArray[i]= params.expireDate;
     db.dbQuery(query,paramArray,function(error,result){

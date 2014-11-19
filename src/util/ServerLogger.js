@@ -2,6 +2,8 @@
  * Created by ling xue on 14-11-18.
  */
 
+var sysConfig = require('../config/SystemConfig.js');
+
 
 function createLogger(name){
     var log4js = require('log4js');
