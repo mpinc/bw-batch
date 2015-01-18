@@ -15,6 +15,12 @@ function getDayRangeLong(){
     return dayRangeObj;
 
 }
+function padLeft(str,lenght){
+    if(str.length >= lenght)
+        return str;
+    else
+        return padLeft("0" +str,lenght);
+}
 
 function getLastDayLong(){
     var currentDate = new Date();
@@ -31,13 +37,15 @@ function getWeekByDate(){
     var d2 = new Date();
     d2.setMonth(0);
     d2.setDate(1);
+    d2.setDate(7-d2.getDay());
     var rq = d1-d2;
     var s1 = Math.ceil(rq/(24*60*60*1000));
     var s2 = Math.ceil(s1/7);
-    return s2;
+    return s2+1;
 }
 module.exports = {
     getDayRangeLong : getDayRangeLong,
     getLastDayLong : getLastDayLong,
-    getWeekByDate : getWeekByDate
+    getWeekByDate : getWeekByDate,
+    padLeft :padLeft
 }

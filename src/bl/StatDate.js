@@ -14,8 +14,8 @@ function saveStatDate(callback){
     dateObj.month = today.getMonth()+1;
     dateObj.year = today.getFullYear();
     dateObj.week = dateUtil.getWeekByDate();
-    dateObj.yearMonth = Number(dateObj.year+""+dateObj.month);
-    dateObj.yearWeek = Number(dateObj.year+""+dateObj.week);
+    dateObj.yearMonth = Number(dateObj.year+dateUtil.padLeft(""+dateObj.month,2));
+    dateObj.yearWeek = Number(dateObj.year+dateUtil.padLeft(""+dateObj.week,2));
     statDateDao.insertNewDate(dateObj,function(err,result){
         logger.debug(' saveStatDate ' );
         callback(err,result);

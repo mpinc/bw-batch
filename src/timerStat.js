@@ -64,7 +64,7 @@ var sched =  {
                 });
             }).seq(function(){
                 var that = this;
-                orderBL.setOrderExpired(function(err,result){
+                /*orderBL.setOrderExpired(function(err,result){
                     if(err){
                         logger.error(err.message)
 
@@ -72,7 +72,8 @@ var sched =  {
                         logger.info(' SetOrderExpired ' + result.affectedRows +" orders is update to expired");
                     }
                     that();
-                })
+                })*/
+                that();
 
             }).seq(function() {
                 var that = this;
@@ -86,40 +87,41 @@ var sched =  {
                     that();
                 })
             }).seq(function(){
-            var that = this;
-            bizMenuStat.doMenuClickStat(function(err,records){
-                if(err){
-                    logger.error(err.message)
-                    throw err;
-                }else{
-                    var statTime = dataUtil.getLastDayLong();
-                    var menuItemArray = [];
-                    if(records != null && records.length >0){
-                        for(var i = 0,j=records.length;i<j;i++){
-                            var menuItemObj = {};
-                            //console.log(records[i]);
-                            menuItemObj.bizId = records[i]['params.bizId'];
-                            menuItemObj.productId = records[i]['params.id'];
-                            menuItemObj.count = records[i].count;
-                            menuItemObj.statTime = statTime;
-                            menuItemArray.push(menuItemObj);
+                var that = this;
+                /*bizMenuStat.doMenuClickStat(function(err,records){
+                    if(err){
+                        logger.error(err.message)
+                        throw err;
+                    }else{
+                        var statTime = dataUtil.getLastDayLong();
+                        var menuItemArray = [];
+                        if(records != null && records.length >0){
+                            for(var i = 0,j=records.length;i<j;i++){
+                                var menuItemObj = {};
+                                //console.log(records[i]);
+                                menuItemObj.bizId = records[i]['params.bizId'];
+                                menuItemObj.productId = records[i]['params.id'];
+                                menuItemObj.count = records[i].count;
+                                menuItemObj.statTime = statTime;
+                                menuItemArray.push(menuItemObj);
+                            }
+                        }
+                        if(menuItemArray != null && menuItemArray.length >0){
+                            bizMenuStat.saveMenuViewResult(menuItemArray,dateKey,function(err,result){
+                                if(err){
+                                    logger.error(err.message)
+                                    throw err;
+                                }
+                            });
+                            //console.log(menuItemArray);
                         }
                     }
-                    if(menuItemArray != null && menuItemArray.length >0){
-                        bizMenuStat.saveMenuViewResult(menuItemArray,dateKey,function(err,result){
-                            if(err){
-                                logger.error(err.message)
-                                throw err;
-                            }
-                        });
-                        //console.log(menuItemArray);
-                    }
-                }
+                    that();
+                });*/
                 that();
-            });
         }).seq(function(){
                 var that = this;
-                bizMenuStat.doMenuOrderStat(function(err,records){
+                /*bizMenuStat.doMenuOrderStat(function(err,records){
                     if(err){
                         logger.error(err.message)
                         throw err;
@@ -148,36 +150,37 @@ var sched =  {
                         }
                     }
                     that();
-                });
+                });*/
+                that();
             }).seq(function(){
-            customerCheckInStat.doCustomerCheckInStat(function(err,records){
-                if(err){
-                    throw err;
-                    logger.error(err.message)
-                }else{
-                    var statTime = dataUtil.getLastDayLong();
-                    var checkInCountArray = [];
-                    if(records != null && records.length >0){
-                        for(var i = 0,j=records.length;i<j;i++){
-                            var checkInCountObj = {};
-                            //console.log(records[i]);
-                            checkInCountObj.bizId = records[i]['params.bizId'];
-                            checkInCountObj.count = records[i].count;
-                            checkInCountObj.statTime = statTime;
-                            checkInCountArray.push(checkInCountObj);
+                /*customerCheckInStat.doCustomerCheckInStat(function(err,records){
+                    if(err){
+                        throw err;
+                        logger.error(err.message)
+                    }else{
+                        var statTime = dataUtil.getLastDayLong();
+                        var checkInCountArray = [];
+                        if(records != null && records.length >0){
+                            for(var i = 0,j=records.length;i<j;i++){
+                                var checkInCountObj = {};
+                                //console.log(records[i]);
+                                checkInCountObj.bizId = records[i]['params.bizId'];
+                                checkInCountObj.count = records[i].count;
+                                checkInCountObj.statTime = statTime;
+                                checkInCountArray.push(checkInCountObj);
+                            }
+                        }
+                        if(checkInCountArray != null && checkInCountArray.length >0){
+                            customerCheckInStat.saveCustomerCheckInRes(checkInCountArray,dateKey,function(err,result){
+                                if(err){
+                                    logger.error(err.message)
+                                    throw err;
+                                }
+                            });
                         }
                     }
-                    if(checkInCountArray != null && checkInCountArray.length >0){
-                        customerCheckInStat.saveCustomerCheckInRes(checkInCountArray,dateKey,function(err,result){
-                            if(err){
-                                logger.error(err.message)
-                                throw err;
-                            }
-                        });
-                    }
-                }
-                return ;
-            });
+                    return ;
+                });*/
 
         });
 
