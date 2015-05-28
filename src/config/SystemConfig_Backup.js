@@ -35,12 +35,9 @@ var mysqlConnectOptions ={
     host: '127.0.0.1'
 };
 
-var mongodbConnectionOptions = {
-    ipAdd : "localhost",
-    port : 27017,
-    dbName : 'bizwise'
-};
-
+var mongoConfig = {
+    connect : 'mongodb://127.0.0.1:27017/bizwise'
+}
 var loggerConfig = {
     appenders: [
         { type: 'console' }
@@ -52,12 +49,10 @@ function getMysqlOptions (){
     return mysqlConnectOptions;
 }
 
-function getMongodbOption(){
-    return mongodbConnectionOptions
-}
+
 module.exports = {
 
-    getMysqlOptions : getMysqlOptions ,
-    getMongodbOption : getMongodbOption ,
+    getMysqlOptions : getMysqlOptions,
+    mongoConfig : mongoConfig ,
     loggerConfig : loggerConfig
 }
