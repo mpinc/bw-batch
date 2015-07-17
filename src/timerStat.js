@@ -16,7 +16,7 @@ var logger = serverLogger.createLogger('TimerStat.js');
 
 later.date.localTime();
 
-var basic = {h:[11],m: [57],s:[10]};
+var basic = {h:[1],m: [10],s:[10]};
 var composite = [basic];
 
 /*var basic0 = {s:[55]};
