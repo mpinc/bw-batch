@@ -40,7 +40,13 @@ var mongoConfig = {
 }
 var loggerConfig = {
     appenders: [
-        { type: 'console' }
+        { type: 'console' },
+        {
+             type: 'file',
+             filename: './logs/access.log',
+             maxLogSize: '4m',
+             backups:4
+        }
     ],
     replaceConsole: true
 }
