@@ -38,7 +38,7 @@ var sched =  {
         Seq().seq(function(){
             var that = this;
             logger.debug("init create business index")
-            nodeRequest.get('http://127.0.0.1:8080/cust/do/createBizIndex', null,function (error, response, body) {
+            nodeRequest.get('http://127.0.0.1:8080/cust/do/createWechatBizIndex', null,function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     //console.log("create business index") ;
                     logger.info("create business index success")
