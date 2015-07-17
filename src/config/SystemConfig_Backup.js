@@ -43,7 +43,7 @@ var loggerConfig = {
         { type: 'console' },
         {
              type: 'file',
-             filename: './logs/access.log',
+             filename: '/var/log/bw-batch/bw.log',
              maxLogSize: '4m',
              backups:4
         }
