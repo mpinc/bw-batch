@@ -8,6 +8,7 @@ var dataUtil = require('./util/DateUtil.js');
 var bizMenuStat = require('./bl/BizMenuStat.js');
 var customerCheckInStat = require('./bl/CustomerCheckInStat.js');
 var orderBL = require('./bl/OrderBL.js');
+var paymentBL = require('./bl/PaymentBL.js');
 var statDate = require('./bl/StatDate.js');
 var nodeRequest = require('request');
 
@@ -85,6 +86,22 @@ var sched =  {
                         dateKey = result.insertId;
                     }
                     that();
+                })
+            }).seq(function(){
+                //Save all payment by day
+                var that = this;
+                paymentBL.autoAddPaymentStatByDay({dateId : dateKey},function(error,result){
+                    if(error){
+                        logger.error(error.message)
+                        throw error;
+                    }else{
+                        if(result && result.affectedRows >0){
+                            logger.info("Add payment stat success "+ dateKey);
+                        }else{
+                            logger.warn("Add payment stat failed "+ dateKey);
+                        }
+                        that();
+                    }
                 })
             }).seq(function(){
                 var that = this;
