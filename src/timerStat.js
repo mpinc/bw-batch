@@ -33,6 +33,9 @@ var sched =  {
 };
 
  try{
+    statDate.saveStatDate(function(error,result){
+        console.log(result);
+    })
     later.setInterval(function() {
         logger.info("Begin to execute batch job !")
         var dateKey ;
