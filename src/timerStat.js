@@ -11,13 +11,13 @@ var orderBL = require('./bl/OrderBL.js');
 var paymentBL = require('./bl/PaymentBL.js');
 var statDate = require('./bl/StatDate.js');
 var nodeRequest = require('request');
-
+var sysConfig = require('./config/SystemConfig.js');
 var serverLogger = require('./util/ServerLogger.js');
 var logger = serverLogger.createLogger('TimerStat.js');
 
 later.date.localTime();
 
-var basic = {h:[11],m: [51],s:[10]};
+var basic = {h:[12],m: [17],s:[10]};
 var composite = [basic];
 console.log('Bw batch start at '+ (new Date()).toLocaleString())
 /*var basic0 = {s:[55]};
@@ -39,7 +39,7 @@ var sched =  {
         Seq().seq(function(){
             var that = this;
             logger.debug("init create business index")
-            nodeRequest.get('http://127.0.0.1:8080/cust/do/createWechatBizIndex', null,function (error, response, body) {
+            nodeRequest.get(sysConfig.serverUrl+'/cust/do/createWechatBizIndex', null,function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     //console.log("create business index") ;
                     logger.info("create business index success")
@@ -53,7 +53,7 @@ var sched =  {
         }).seq(function(){
                 var that = this;
 
-                nodeRequest.get('http://127.0.0.1:8080/cust/do/createProdIndex', null,function (error, response, body) {
+                nodeRequest.get(sysConfig.serverUrl+'/cust/do/createProdIndex', null,function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         //console.log("create product index") ;
                         logger.info("create product index success")

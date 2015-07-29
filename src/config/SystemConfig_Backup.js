@@ -38,6 +38,8 @@ var mysqlConnectOptions ={
 var mongoConfig = {
     connect : 'mongodb://127.0.0.1:27017/bizwise'
 }
+
+var logLevel = 'DEBUG';
 var loggerConfig = {
     appenders: [
         { type: 'console' },
@@ -55,10 +57,14 @@ function getMysqlOptions (){
     return mysqlConnectOptions;
 }
 
+var serverUrl = 'http://123.57.11.150';
+
 
 module.exports = {
 
     getMysqlOptions : getMysqlOptions,
     mongoConfig : mongoConfig ,
-    loggerConfig : loggerConfig
+    loggerConfig : loggerConfig.appenders,
+    logLevel :logLevel ,
+    serverUrl : serverUrl
 }
