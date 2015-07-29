@@ -17,7 +17,7 @@ var logger = serverLogger.createLogger('TimerStat.js');
 
 later.date.localTime();
 
-var basic = {h:[15],m: [55],s:[10]};
+var basic = {h:[1],m: [10],s:[10]};
 var composite = [basic];
 console.log('Bw batch start at '+ (new Date()).toLocaleString())
 /*var basic0 = {s:[55]};
