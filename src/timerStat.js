@@ -40,7 +40,7 @@ var sched =  {
         Seq().seq(function(){
             var that = this;
             logger.debug("init create business index")
-            nodeRequest.get(sysConfig.serverUrl+'/cust/do/createWechatBizIndex', null,function (error, response, body) {
+            nodeRequest.get(sysConfig.serverUrl+'/api/cust/do/createWechatBizIndex', null,function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     //console.log("create business index") ;
                     logger.info("create business index success")
@@ -54,7 +54,7 @@ var sched =  {
         }).seq(function(){
                 var that = this;
 
-                nodeRequest.get(sysConfig.serverUrl+'/cust/do/createProdIndex', null,function (error, response, body) {
+                nodeRequest.get(sysConfig.serverUrl+'/api/cust/do/createProdIndex', null,function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         //console.log("create product index") ;
                         logger.info("create product index success")
