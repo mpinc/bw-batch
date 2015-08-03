@@ -91,7 +91,7 @@ var sched =  {
             }).seq(function(){
                 //Save all payment by day
                 var that = this;
-                paymentBL.autoAddPaymentStatByDay({dateId : dateKey},function(error,result){
+                paymentBL.autoAddPaymentStatByDay({dateId : parseInt(dateKey)-1},function(error,result){
                     if(error){
                         logger.error(error.message)
                         throw error;
