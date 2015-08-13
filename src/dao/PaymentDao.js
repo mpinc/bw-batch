@@ -13,8 +13,8 @@ function addPaymentStatByDay(params,callback){
 
     var paramArr = [], i = 0;
     paramArr[i++] = params.dateId;
-    paramArr[i++] = wechatUtil.WECHAT_SERVICE_FEE_RATE;
     paramArr[i++] = wechatUtil.WECHAT_PAYMENT_BACK_RATE;
+    paramArr[i++] = wechatUtil.WECHAT_SERVICE_FEE_RATE;
 
     paramArr[i++] = params.dateId;
     db.dbQuery(query,paramArr,function(error,result){
